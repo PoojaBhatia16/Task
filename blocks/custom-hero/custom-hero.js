@@ -1,13 +1,9 @@
 export default async function decorate(block) {
   let heroData;
-  try {
-    const resp = await fetch('/blocks/custom-hero/custom-hero.json');
-    if (!resp.ok) throw new Error(`Failed to load custom-hero.json: ${resp.status}`);
-    heroData = await resp.json();
-  } catch (err) {
-    console.error('Hero block: could not load custom-hero.json', err);
-    return;
-  }
+  
+  const resp = await fetch('/blocks/custom-hero/custom-hero.json');
+  heroData = await resp.json();
+  
 
   const image = document.createElement('img');
   image.src = heroData.image;
@@ -58,8 +54,5 @@ export default async function decorate(block) {
 
   block.querySelector('.custom-hero-bg').append(image);
   block.querySelector('.custom-hero-meta li').prepend(icon);
-
-  // reveal only after content is fully built, prevents a flash of
-  // undecorated/empty block while the JSON fetch is in flight
   block.classList.add('hero-decorated');
 }

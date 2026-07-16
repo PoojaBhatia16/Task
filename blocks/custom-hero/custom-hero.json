@@ -4,6 +4,6 @@
   "badge": "In Progress",
   "meta": ["Cohort", "Professional", "4 Weeks"],
   "desc": "Join a four-week cohort experience focused on building practical skills in Adobe Journey Optimizer. Learn through live sessions, guided labs, and peer collaboration as you progress from core concepts to creating personalized, cross-channel customer journeys.",
-  "image": "banner.png",
+  "image": "/banner.png",
   "icon": "/icons/teams.svg"
 }
