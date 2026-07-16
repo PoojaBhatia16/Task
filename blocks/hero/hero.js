@@ -1,9 +1,9 @@
-const COHORT_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-  <circle cx="8.5" cy="8" r="3.1" />
-  <circle cx="16.5" cy="9.2" r="2.4" />
-  <path d="M2.6 18.4c0-3 2.6-4.9 5.9-4.9s5.9 1.9 5.9 4.9" />
-  <path d="M15.4 13.8c2.9.1 5 1.9 5 4.6" />
-</svg>`;
+// const COHORT_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+//   <circle cx="8.5" cy="8" r="3.1" />
+//   <circle cx="16.5" cy="9.2" r="2.4" />
+//   <path d="M2.6 18.4c0-3 2.6-4.9 5.9-4.9s5.9 1.9 5.9 4.9" />
+//   <path d="M15.4 13.8c2.9.1 5 1.9 5 4.6" />
+// </svg>`;
 
 const cellText = (cell) => (cell ? cell.textContent.trim() : '');
 
