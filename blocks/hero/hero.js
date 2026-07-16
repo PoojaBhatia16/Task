@@ -1,18 +1,107 @@
-// const COHORT_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-//   <circle cx="8.5" cy="8" r="3.1" />
-//   <circle cx="16.5" cy="9.2" r="2.4" />
-//   <path d="M2.6 18.4c0-3 2.6-4.9 5.9-4.9s5.9 1.9 5.9 4.9" />
-//   <path d="M15.4 13.8c2.9.1 5 1.9 5 4.6" />
-// </svg>`;
+function moveField(cell, className) {
+  if (!cell || !cell.textContent.trim()) return null;
+  cell.className = className;
+  return cell;
+}
 
-const cellText = (cell) => (cell ? cell.textContent.trim() : '');
+function extractTitle(container) {
+  if (!container) return null;
+  const heading = container.querySelector('h1, h2, h3, h4, h5, h6');
+  if (heading && heading.textContent.trim()) {
+    heading.className = 'hero-title';
+    return heading;
+  }
+  if (!container.textContent.trim()) return null;
+  const h1 = document.createElement('h1');
+  h1.className = 'hero-title';
+  const source = container.querySelector('p') || container;
+  h1.append(...source.childNodes);
+  return h1;
+}
 
 function readMeta(cell) {
-  if (!cell) return [];
-  
-  const items = [...cell.querySelectorAll('li')].map((li) => li.textContent.trim());
-  if (items.length) return items;
-  return cellText(cell).split(',').map((s) => s.trim()).filter(Boolean);
+  if (!cell) return null;
+  const list = cell.querySelector('ul, ol');
+  if (list && list.children.length) {
+    list.className = 'hero-meta';
+    return list;
+  }
+  const text = cell.textContent.trim();
+  if (!text) return null;
+  const items = text.split(/[•|,]/).map((s) => s.trim()).filter(Boolean);
+  if (!items.length) return null;
+  const ul = document.createElement('ul');
+  ul.className = 'hero-meta';
+  items.forEach((item) => {
+    const li = document.createElement('li');
+    li.textContent = item;
+    ul.append(li);
+  });
+  return ul;
+}
+
+function isAutoBlocked(block) {
+  return block.children.length === 1
+    && !!block.querySelector('h1')
+    && !!block.querySelector('picture');
+}
+
+/** Read hero field data out of an authored `.hero` block, wherever it came from. */
+function parseHeroBlock(block) {
+  if (isAutoBlocked(block)) {
+    return {
+      title: extractTitle(block),
+      media: block.querySelector('picture'),
+    };
+  }
+
+  const [eyebrow, title, badge, meta, description, image] = [...block.children]
+    .map((row) => row.firstElementChild);
+
+  return {
+    eyebrow: moveField(eyebrow, 'hero-eyebrow'),
+    title: extractTitle(title),
+    badge: moveField(badge, 'hero-badge'),
+    meta: readMeta(meta),
+    description: moveField(description, 'hero-description'),
+    media: image ? image.querySelector('picture, img') : null,
+  };
+}
+
+function renderHero({
+  eyebrow = null, title = null, badge = null, meta = null, description = null, media = null,
+} = {}) {
+  const fragment = document.createDocumentFragment();
+
+  if (media) {
+    const bg = document.createElement('div');
+    bg.className = 'hero-bg';
+    bg.append(media);
+    fragment.append(bg);
+  }
+
+  const layout = document.createElement('div');
+  layout.className = 'hero-layout';
+  fragment.append(layout);
+
+  const text = document.createElement('div');
+  text.className = 'hero-text';
+  layout.append(text);
+
+  if (eyebrow) text.append(eyebrow);
+
+  if (title || badge) {
+    const headline = document.createElement('div');
+    headline.className = 'hero-headline';
+    if (title) headline.append(title);
+    if (badge) headline.append(badge);
+    text.append(headline);
+  }
+
+  if (meta) text.append(meta);
+  if (description) text.append(description);
+
+  return fragment;
 }
 
 function primeLcp(picture) {
@@ -22,91 +111,10 @@ function primeLcp(picture) {
   img.setAttribute('fetchpriority', 'high');
 }
 
-function render(block, data) {
-  if (data.media) {
-    const bg = document.createElement('div');
-    bg.className = 'hero-bg';
-    bg.append(data.media);
-    block.append(bg);
-  }
-
-  const layout = document.createElement('div');
-  layout.className = 'hero-layout';
-  block.append(layout);
-
-  const text = document.createElement('div');
-  text.className = 'hero-text';
-  layout.append(text);
-
-  if (data.eyebrow) {
-    const p = document.createElement('p');
-    p.className = 'hero-eyebrow';
-    p.textContent = data.eyebrow;
-    text.append(p);
-  }
-
-  if (data.title || data.badge) {
-    const headline = document.createElement('div');
-    headline.className = 'hero-headline';
-
-    if (data.title) {
-      const h1 = document.createElement('h1');
-      h1.className = 'hero-title';
-      h1.textContent = data.title;
-      headline.append(h1);
-    }
-    if (data.badge) {
-      const span = document.createElement('span');
-      span.className = 'hero-badge';
-      span.textContent = data.badge;
-      headline.append(span);
-    }
-    text.append(headline);
-  }
-
-  if (data.meta.length) {
-    const ul = document.createElement('ul');
-    ul.className = 'hero-meta';
-    data.meta.forEach((item, i) => {
-      const li = document.createElement('li');
-      if (i === 0) li.innerHTML = COHORT_ICON;
-      li.append(document.createTextNode(item));
-      ul.append(li);
-    });
-    text.append(ul);
-  }
-
-  if (data.description) {
-    const p = document.createElement('p');
-    p.className = 'hero-description';
-    p.textContent = data.description;
-    text.append(p);
-  }
-}
-
-export default function decorate(block) {
-  const picture = block.querySelector('picture, img');
-  primeLcp(picture);
-
-  if (block.children.length === 1 && block.querySelector('h1')) {
-    const title = block.querySelector('h1').textContent.trim();
-    block.textContent = '';
-    render(block, { title, meta: [], media: picture });
-    return;
-  }
-
-  const [eyebrow, title, badge, meta, description] = [...block.children]
-    .map((row) => row.firstElementChild);
-
-  const data = {
-    eyebrow: cellText(eyebrow),
-    title: cellText(title),
-    badge: cellText(badge),
-    meta: readMeta(meta),
-    description: cellText(description),
-    media: picture,
-  };
-
+export default async function decorate(block) {
+  const data = parseHeroBlock(block);
+  primeLcp(data.media);
+  const hero = renderHero(data);
   block.textContent = '';
-  render(block, data);
+  block.append(hero);
 }
