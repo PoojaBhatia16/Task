@@ -10,7 +10,7 @@ function HeroHelper({
 
   const bg = document.createElement('div');
   bg.className = 'hero-bg';
-   bg.append(image);
+  bg.append(image);
   fr.append(bg);
 
   const lyt = document.createElement('div');
@@ -37,7 +37,7 @@ function HeroHelper({
 export default function decorate(block) {
   const [eye, title, badge, meta, description, image] = block.children;
 
-  eye.classList.add('hero-eye');
+  eye.classList.add('hero-eyebrow');
   title.classList.add('hero-title');
   badge.classList.add('hero-badge');
   meta.classList.add('hero-meta');
@@ -49,7 +49,7 @@ export default function decorate(block) {
       title,
       badge,
       meta,
-      desc,
+      desc: description,
       image: image.querySelector('picture'),
     }),
   );

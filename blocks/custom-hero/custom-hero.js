@@ -58,4 +58,8 @@ export default async function decorate(block) {
 
   block.querySelector('.custom-hero-bg').append(image);
   block.querySelector('.custom-hero-meta li').prepend(icon);
+
+  // reveal only after content is fully built, prevents a flash of
+  // undecorated/empty block while the JSON fetch is in flight
+  block.classList.add('hero-decorated');
 }

@@ -1,3 +1,7 @@
+.custom-hero:not(.hero-decorated) {
+  visibility: hidden;
+}
+
 .custom-hero {
   --hero-ink: #131313;
   --hero-badge-bg: #f393ff;
