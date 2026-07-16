@@ -5,7 +5,7 @@ const heroData = {
   meta: ['Cohort', 'Professional', '4 Weeks'],
   description:
     'Join a four-week cohort experience focused on building practical skills in Adobe Journey Optimizer. Learn through live sessions, guided labs, and peer collaboration as you progress from core concepts to creating personalized, cross-channel customer journeys.',
-  image: 'image1.png',
+  image: 'banner.png',
   icon: '/icons/teams.svg',
 };
 
