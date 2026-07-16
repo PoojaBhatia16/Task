@@ -13,7 +13,7 @@ export default function decorate(block) {
   const image = document.createElement('img');
   image.src = heroData.image;
   image.alt = heroData.title;
-  image.className = 'dynamic-hero-image';
+  image.className = 'custom-image';
 
   const icon = document.createElement('span');
   icon.className = 'hero-icon';
@@ -21,35 +21,35 @@ export default function decorate(block) {
     <img src="${heroData.icon}" alt="">
   `;
 
-  block.classList.add('dynamic-hero');
+  block.classList.add('custom');
 
   block.innerHTML = `
-    <div class="dynamic-hero-bg"></div>
+    <div class="custom-bg"></div>
 
-    <div class="dynamic-hero-layout">
-      <div class="dynamic-hero-text">
+    <div class="custom-layout">
+      <div class="custom-text">
 
-        <p class="dynamic-hero-eyebrow">
+        <p class="custom-eyebrow">
           ${heroData.eyebrow}
         </p>
 
-        <div class="dynamic-hero-headline">
-          <h2 class="dynamic-hero-title">
+        <div class="custom-headline">
+          <h2 class="custom-title">
             ${heroData.title}
           </h2>
 
-          <span class="dynamic-hero-badge">
+          <span class="custom-badge">
             ${heroData.badge}
           </span>
         </div>
 
-        <ul class="dynamic-hero-meta">
+        <ul class="custom-meta">
           <li>${heroData.meta[0]}</li>
           <li>${heroData.meta[1]}</li>
           <li>${heroData.meta[2]}</li>
         </ul>
 
-        <p class="dynamic-hero-description">
+        <p class="custom-description">
           ${heroData.description}
         </p>
 
@@ -57,6 +57,6 @@ export default function decorate(block) {
     </div>
   `;
 
-  block.querySelector('.dynamic-hero-bg').append(image);
-  block.querySelector('.dynamic-hero-meta li').prepend(icon);
+  block.querySelector('.custom-bg').append(image);
+  block.querySelector('.custom-meta li').prepend(icon);
 }
