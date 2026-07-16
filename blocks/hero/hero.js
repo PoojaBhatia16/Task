@@ -1,13 +1,5 @@
-function HeroHelper({
-  eye,
-  title,
-  badge,
-  meta,
-  desc,
-  image,
-}) {
+function HeroHelper({eye,title,badge,meta,desc,image,}) {
   const fr = document.createDocumentFragment();
-
   const bg = document.createElement('div');
   bg.className = 'hero-bg';
   bg.append(image);
