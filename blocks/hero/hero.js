@@ -9,7 +9,7 @@ const cellText = (cell) => (cell ? cell.textContent.trim() : '');
 
 function readMeta(cell) {
   if (!cell) return [];
-  // A bullet list has no separators in textContent, so read the items directly.
+  
   const items = [...cell.querySelectorAll('li')].map((li) => li.textContent.trim());
   if (items.length) return items;
   return cellText(cell).split(',').map((s) => s.trim()).filter(Boolean);
