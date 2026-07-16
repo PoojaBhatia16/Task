@@ -221,4 +221,13 @@
   .hero-meta li + li::before {
     display: none; 
   }
+
+  .hero-badge {
+  width: fit-content;   
+  flex: 0 0 auto;        
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--hero-badge);
+  white-space: nowrap;
+}
 }
